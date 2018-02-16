@@ -21,6 +21,7 @@ class ProgressCircle extends PureComponent {
         const {
                   style,
                   progressColor,
+                  restColor,
                   startAngle,
                   endAngle,
                   animate,
@@ -46,7 +47,7 @@ class ProgressCircle extends PureComponent {
             {
                 key: 'rest',
                 value: 1 - progress,
-                color: '#ECECEC',
+                color: restColor,
             },
         ]
 
