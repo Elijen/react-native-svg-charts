@@ -26,6 +26,8 @@ class ProgressCircle extends PureComponent {
                   endAngle,
                   animate,
                   animateDuration,
+                  circleWidth,
+                  cornerRadius
               } = this.props
 
         let { progress } = this.props
@@ -46,31 +48,37 @@ class ProgressCircle extends PureComponent {
             },
             {
                 key: 'rest',
-                value: 1 - progress,
+                value: 2 * Math.PI,
                 color: restColor,
             },
         ]
 
-        const pieSlices = shape
-            .pie()
-            .sort(null)
-            .startAngle(startAngle)
-            .endAngle(endAngle)
-            (data.map(d => d.value))
-
-        const arcs = pieSlices.map((slice, index) => (
+        const arcs = [
             {
-                ...data[ index ],
-                ...slice,
+                key: 'progress',
+                value: progress,
+                color: progressColor,
                 path: shape.arc()
                     .outerRadius(outerDiameter / 2)  // Radius of the pie
-                    .innerRadius((outerDiameter / 2) - 5)  // Inner radius: to create a donut or pie
-                    .startAngle(slice.startAngle)
-                    .endAngle(slice.endAngle)
-                    .cornerRadius(45)
+                    .innerRadius((outerDiameter / 2) - circleWidth)  // Inner radius: to create a donut or pie
+                    .startAngle(startAngle)
+                    .endAngle(progress * endAngle)
+                    .cornerRadius(cornerRadius)
                     (),
-            }
-        ))
+            },
+
+            {
+                key: 'rest',
+                value: 2 * Math.PI,
+                color: restColor,
+                path: shape.arc()
+                    .outerRadius(outerDiameter / 2)  // Radius of the pie
+                    .innerRadius((outerDiameter / 2) - circleWidth)  // Inner radius: to create a donut or pie
+                    .startAngle(startAngle)
+                    .endAngle(endAngle)
+                    (),
+            },
+        ];
 
         return (
             <View
@@ -115,6 +123,8 @@ ProgressCircle.defaultProps = {
     progressColor: '#22B6B0',
     startAngle: 0,
     endAngle: Math.PI * 2,
+    circleWidth: 5,
+    cornerRadius: 45
 }
 
 export default ProgressCircle
